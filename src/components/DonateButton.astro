@@ -1,0 +1,55 @@
+---
+/**
+ * DonateButton.astro
+ * ───────────────────
+ * Botón sutil de donación vía MercadoPago.
+ *
+ * Props:
+ *   href  — URL de MercadoPago
+ *   label — texto del botón
+ */
+interface Props {
+  href?:  string;
+  label?: string;
+}
+const {
+  href  = 'https://link.mercadopago.com.ar/fattiepox',
+  label = 'ayudame a ganarle a andrea (o al menos a comprar mi arroz) · alias: fattiepox',
+} = Astro.props;
+---
+
+<div class="donate-wrap">
+  <a class="donate-btn font-body" href={href} target="_blank" rel="noopener noreferrer">
+    <span aria-hidden="true">💙</span>
+    {label}
+  </a>
+</div>
+
+<style>
+  .donate-wrap {
+    text-align: center;
+  }
+
+  .donate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--color-very-muted);
+    color: var(--color-muted);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-pill);
+    padding: 0.45rem 1.3rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+  }
+
+  .donate-btn:hover,
+  .donate-btn:focus-visible {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.72);
+    border-color: rgba(255,255,255,0.22);
+    outline: none;
+  }
+</style>

@@ -1,0 +1,52 @@
+/* ============================================
+   DESIGN TOKENS — andrea-counter
+   Editá estas variables para cambiar todo el
+   sistema visual desde un solo lugar.
+   ============================================ */
+
+:root {
+  /* ── Paleta principal ── */
+  --color-bg:           #0d0b0f;
+  --color-surface:      #1a161f;
+  --color-border:       #0d0b0f;
+
+  --color-yellow:       #FFE600;
+  --color-orange:       #FF6B00;
+  --color-pink:         #FF3CAC;
+  --color-green:        #00FF87;
+  --color-blue:         #00C2FF;
+  --color-white:        #ffffff;
+  --color-muted:        rgba(255,255,255,0.35);
+  --color-very-muted:   rgba(255,255,255,0.12);
+
+  /* ── Tipografías ── */
+  --font-display:       'Bangers', cursive;
+  --font-body:          'Comic Neue', cursive;
+
+  /* ── Espacio base ── */
+  --space-xs:   0.4rem;
+  --space-sm:   0.75rem;
+  --space-md:   1rem;
+  --space-lg:   1.5rem;
+  --space-xl:   2rem;
+  --space-2xl:  3rem;
+
+  /* ── Radios ── */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-pill: 999px;
+
+  /* ── Sombras cómic ── */
+  --shadow-comic-sm:  3px 3px 0 var(--color-border);
+  --shadow-comic-md:  5px 5px 0 var(--color-border);
+  --shadow-comic-lg:  8px 8px 0 var(--color-border);
+
+  /* ── Bordes ── */
+  --border-width: 3px;
+  --border-width-heavy: 5px;
+
+  /* ── Transiciones ── */
+  --transition-fast:  0.15s ease;
+  --transition-base:  0.25s ease;
+}

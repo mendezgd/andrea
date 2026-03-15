@@ -1,0 +1,28 @@
+---
+/**
+ * Footer.astro
+ * ─────────────
+ * Pie de página con disclaimer.
+ */
+interface Props {
+  text?: string;
+}
+const {
+  text = 'Contador en tiempo real · datos según Ángel de Brito (Bondi Live)'
+} = Astro.props;
+---
+
+<footer class="site-footer font-body">
+  {text}
+</footer>
+
+<style>
+  .site-footer {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.18);
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-bottom: var(--space-sm);
+  }
+</style>

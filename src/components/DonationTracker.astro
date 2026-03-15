@@ -1,0 +1,182 @@
+---
+/**
+ * DonationTracker.astro
+ * ──────────────────────
+ * Gráfico comparativo: donaciones recibidas vs ganancias de Andrea.
+ * El total de donaciones se lee desde localStorage (escrito por
+ * el botón de MercadoPago vía webhook, o seteado manualmente desde
+ * la consola del navegador con:
+ *   localStorage.setItem('andrea_counter_donations', JSON.stringify([{amount: 5000, date: new Date().toISOString()}]))
+ */
+---
+
+<div class="tracker">
+  <div class="tracker-header">
+    <span class="tracker-title">⚔️ VOS vs ANDREA</span>
+    <span class="tracker-sub font-body">batalla de billetes</span>
+  </div>
+
+  <div class="bars">
+    <div class="bar-row">
+      <span class="bar-name font-body">🌟 Andrea</span>
+      <div class="bar-track">
+        <div class="bar-fill bar-andrea" id="barAndrea"></div>
+      </div>
+      <span class="bar-val font-body" id="barAndreaVal">$0</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-name font-body">💙 Donaciones</span>
+      <div class="bar-track">
+        <div class="bar-fill bar-you" id="barYou"></div>
+      </div>
+      <span class="bar-val font-body" id="barYouVal">$0</span>
+    </div>
+  </div>
+
+  <div class="verdict font-body" id="verdict"></div>
+</div>
+
+<style>
+  .tracker {
+    background: var(--color-surface);
+    border: var(--border-width-heavy) solid var(--color-yellow);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    box-shadow: 8px 8px 0 var(--color-yellow);
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: fadeUp 0.5s 0.9s ease both;
+  }
+
+  .tracker-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .tracker-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    color: var(--color-yellow);
+    letter-spacing: 0.04em;
+  }
+  .tracker-sub {
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 6rem 1fr 5.5rem;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .bar-name {
+    font-size: 0.72rem;
+    color: var(--color-white);
+    white-space: nowrap;
+  }
+  .bar-track {
+    height: 18px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: var(--radius-pill);
+    width: 0%;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    min-width: 0;
+  }
+  .bar-andrea {
+    background: linear-gradient(90deg, var(--color-pink), var(--color-orange));
+  }
+  .bar-you {
+    background: linear-gradient(90deg, var(--color-blue), var(--color-green));
+  }
+
+  .bar-val {
+    font-size: 0.68rem;
+    color: var(--color-muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .verdict {
+    font-size: 0.78rem;
+    color: var(--color-yellow);
+    text-align: center;
+    letter-spacing: 0.05em;
+    min-height: 1.1rem;
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = "andrea_counter_donations";
+
+  function loadTotal() {
+    try {
+      const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      return list.reduce((s: number, d: any) => s + (d.amount || 0), 0);
+    } catch {
+      return 0;
+    }
+  }
+
+  function formatARS(n: number) {
+    return "$" + Math.floor(n).toLocaleString("es-AR");
+  }
+
+  function render() {
+    const youTotal = loadTotal();
+    const andreaTotal =
+      parseFloat(
+        (document.getElementById("moneyTotal")?.textContent || "0")
+          .replace(/[$\.]/g, "")
+          .replace(",", "."),
+      ) || 0;
+
+    const maxVal = Math.max(youTotal, andreaTotal, 1);
+    const youPct = Math.min((youTotal / maxVal) * 100, 100);
+    const andreaPct = Math.min((andreaTotal / maxVal) * 100, 100);
+
+    const barAndrea = document.getElementById(
+      "barAndrea",
+    ) as HTMLElement | null;
+    const barYou = document.getElementById("barYou") as HTMLElement | null;
+    const barAndreaVal = document.getElementById("barAndreaVal");
+    const barYouVal = document.getElementById("barYouVal");
+    const verdict = document.getElementById("verdict");
+
+    if (barAndrea) barAndrea.style.width = andreaPct + "%";
+    if (barYou) barYou.style.width = youPct + "%";
+    if (barAndreaVal) barAndreaVal.textContent = formatARS(andreaTotal);
+    if (barYouVal) barYouVal.textContent = formatARS(youTotal);
+
+    if (verdict) {
+      if (youTotal === 0) {
+        verdict.textContent = "💙 Las donaciones aparecerán acá";
+      } else if (youTotal >= andreaTotal) {
+        verdict.textContent = "🏆 ¡Las donaciones superan a Andrea!";
+      } else {
+        const ratio = (andreaTotal / Math.max(youTotal, 1)).toFixed(0);
+        verdict.textContent = `😅 Andrea gana ${ratio}x más que las donaciones... por ahora`;
+      }
+    }
+  }
+
+  render();
+  setInterval(render, 1000);
+</script>

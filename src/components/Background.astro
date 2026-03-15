@@ -1,0 +1,61 @@
+---
+/**
+ * Background.astro
+ * ─────────────────
+ * Fondo con foto, overlay y trama de cómic.
+ *
+ * Props:
+ *   imageSrc  — ruta a la imagen de fondo (relativa a /public)
+ *               Reemplazá por la foto que quieras.
+ */
+interface Props {
+  imageSrc?: string;
+}
+const { imageSrc = '/images/subject.jpg' } = Astro.props;
+---
+
+<!-- Foto de fondo -->
+<div class="bg-photo" style={`background-image: url('${imageSrc}');`}></div>
+
+<!-- Overlay oscuro gradiente -->
+<div class="bg-overlay"></div>
+
+<!-- Trama de líneas cómic -->
+<div class="bg-lines"></div>
+
+<style>
+  .bg-photo {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center top;
+    filter: saturate(1.4) brightness(0.22);
+    z-index: 0;
+  }
+
+  .bg-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(13,11,15,0.82) 0%,
+      rgba(13,11,15,0.35) 55%,
+      rgba(13,11,15,0.78) 100%
+    );
+    z-index: 1;
+  }
+
+  .bg-lines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 18px,
+      rgba(255,230,0,0.035) 18px,
+      rgba(255,230,0,0.035) 20px
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+</style>

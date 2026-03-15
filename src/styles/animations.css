@@ -1,0 +1,42 @@
+/* ============================================
+   ANIMATIONS — andrea-counter
+   Todas las keyframes centralizadas.
+   ============================================ */
+
+/* Caída de imágenes (rain effect) */
+@keyframes imgFall {
+  0%   { transform: translateY(-90px) rotate(0deg) scale(1);   opacity: 1;   }
+  75%  { opacity: 0.85; }
+  100% { transform: translateY(110vh) rotate(540deg) scale(0.75); opacity: 0; }
+}
+
+/* Pulso neón en el monto total */
+@keyframes greenPulse {
+  0%, 100% { text-shadow: 0 0 18px rgba(0,255,135,0.55), 3px 3px 0 rgba(0,180,90,0.45); }
+  50%       { text-shadow: 0 0 38px rgba(0,255,135,0.95), 3px 3px 0 rgba(0,180,90,0.45); }
+}
+
+/* Entrada con rebote */
+@keyframes bounceIn {
+  0%   { transform: scale(0.7); opacity: 0; }
+  65%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Fade up suave */
+@keyframes fadeUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Wiggle del bocadillo */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50%       { transform: rotate(2deg); }
+}
+
+/* Parpadeo sutil del header */
+@keyframes subtleBlink {
+  0%, 90%, 100% { opacity: 1; }
+  95%            { opacity: 0.75; }
+}

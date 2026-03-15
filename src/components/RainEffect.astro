@@ -1,0 +1,39 @@
+---
+/**
+ * RainEffect.astro
+ * ─────────────────
+ * Genera imágenes cayendo sobre toda la pantalla.
+ *
+ * Props:
+ *   imageSrc — ruta de la imagen circular que llueve.
+ *              Reemplazá por la foto que quieras.
+ *   count    — cantidad de elementos (default: 22)
+ */
+interface Props {
+  imageSrc?: string;
+  count?: number;
+}
+const {
+  imageSrc = '/images/subject.jpg',
+  count    = 22,
+} = Astro.props;
+---
+
+<div
+  id="rainContainer"
+  class="rain-container"
+  data-src={imageSrc}
+  data-count={count}
+></div>
+
+<style>
+  .rain-container {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+</style>
+
+<script src="../scripts/rain.js"></script>

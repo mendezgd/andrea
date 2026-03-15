@@ -1,0 +1,79 @@
+---
+/**
+ * TimeGrid.astro
+ * ───────────────
+ * Grilla de 4 celdas: Meses / Días / Horas / Segundos.
+ * Cada celda tiene un color y emoji personalizable.
+ */
+
+interface TimeCell {
+  id:     string;
+  label:  string;
+  emoji:  string;
+  color:  string; /* valor CSS */
+}
+
+const cells: TimeCell[] = [
+  { id: 'timeMeses', label: 'Meses',    emoji: '🗓️', color: 'var(--color-pink)'   },
+  { id: 'timeDias',  label: 'Días',     emoji: '📅', color: 'var(--color-orange)' },
+  { id: 'timeHoras', label: 'Horas',    emoji: '⏰', color: 'var(--color-blue)'   },
+  { id: 'timeSegs',  label: 'Segundos', emoji: '⚡', color: 'var(--color-yellow)' },
+];
+---
+
+<div class="grid">
+  {cells.map((cell, i) => (
+    <div
+      class="cell"
+      style={`background: ${cell.color}; animation-delay: ${0.5 + i * 0.08}s`}
+    >
+      <div class="emoji">{cell.emoji}</div>
+      <div class="num" id={cell.id}>00</div>
+      <div class="lbl font-body">{cell.label}</div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .cell {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 0.3rem;
+    text-align: center;
+    box-shadow: var(--shadow-comic-md);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .emoji {
+    font-size: 1.1rem;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .num {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    color: var(--color-border);
+    line-height: 1;
+  }
+
+  .lbl {
+    font-size: 0.6rem;
+    color: var(--color-border);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

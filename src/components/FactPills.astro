@@ -1,0 +1,47 @@
+---
+/**
+ * FactPills.astro
+ * ────────────────
+ * Pastillas con rates por día / hora / minuto / segundo.
+ * Los valores se actualizan via JS (counter.js).
+ */
+
+const pills = [
+  { id: 'porDia',  emoji: '🍚', label: 'Por día gana'    },
+  { id: 'porHora', emoji: '😴', label: 'Por hora gana'   },
+  { id: 'porMin',  emoji: '🫙', label: 'Por minuto gana' },
+  { id: 'porSeg',  emoji: '⚡', label: 'Por segundo gana'},
+];
+
+const colors = ['#b2f7ef', '#ffcef3', '#ffeaa7', '#c7f2a4'];
+---
+
+<div class="pills">
+  {pills.map((pill, i) => (
+    <div class="pill font-body" style={`background: ${colors[i]}`}>
+      {pill.emoji} {pill.label} <strong id={pill.id}>—</strong>
+    </div>
+  ))}
+</div>
+
+<style>
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 700px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pill {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 1rem;
+    font-size: 0.8rem;
+    box-shadow: var(--shadow-comic-sm);
+    white-space: nowrap;
+    color: var(--color-border);
+    animation: fadeUp 0.5s 0.7s ease both;
+  }
+</style>
