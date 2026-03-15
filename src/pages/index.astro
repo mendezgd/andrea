@@ -7,61 +7,57 @@
  * editá esta sección para personalizar el contenido
  * sin tocar los componentes.
  */
-import BaseLayout    from '../layouts/BaseLayout.astro';
-import Background    from '../components/Background.astro';
-import RainEffect    from '../components/RainEffect.astro';
-import Header        from '../components/Header.astro';
-import SubjectCard   from '../components/SubjectCard.astro';
-import MoneyDisplay  from '../components/MoneyDisplay.astro';
-import TimeGrid      from '../components/TimeGrid.astro';
-import FactPills     from '../components/FactPills.astro';
-import DonateButton     from '../components/DonateButton.astro';
-import DonationTracker  from '../components/DonationTracker.astro';
-import Footer           from '../components/Footer.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Background from "../components/Background.astro";
+import RainEffect from "../components/RainEffect.astro";
+import Header from "../components/Header.astro";
+import SubjectCard from "../components/SubjectCard.astro";
+import MoneyDisplay from "../components/MoneyDisplay.astro";
+import TimeGrid from "../components/TimeGrid.astro";
+import FactPills from "../components/FactPills.astro";
+import DonateButton from "../components/DonateButton.astro";
+import DonationTracker from "../components/DonationTracker.astro";
+import DonorWall from "../components/DonorWall.astro";
+import Footer from "../components/Footer.astro";
+
+// Leemos los donantes para calcular el total
+import { donors } from "../data/donors";
+const donationsTotal = donors.reduce((s, d) => s + d.amount, 0);
 
 // ══════════════════════════════════════════
 // CONFIGURACIÓN DE CONTENIDO
 // Editá estos valores para personalizar todo.
 // ══════════════════════════════════════════
 
-// Imagen de fondo (en /public/images/)
-const BG_IMAGE      = '/images/subject2.webp';
+const BG_IMAGE = "/images/subject2.webp";
+const RAIN_IMAGE = "/images/subject.webp";
+const RAIN_COUNT = 22;
 
-// Imagen que llueve (puede ser la misma o una diferente)
-const RAIN_IMAGE    = '/images/subject.webp';
-const RAIN_COUNT    = 22;
+const SHOW_NAME = "Gran Hermano · Generación Dorada";
+const SUBJECT_NAME = "Andrea del Boca";
+const ENTRY_DATE = "23/02/2026 a las 22:15 hs";
+const ENTRY_NOTE = "Cocinando arroz y silbando desde entonces";
 
-// Persona y show
-const SHOW_NAME     = 'Gran Hermano · Generación Dorada';
-const SUBJECT_NAME  = 'Andrea del Boca';
-const ENTRY_DATE    = '23/02/2026 a las 22:15 hs';
-const ENTRY_NOTE    = 'Cocinando arroz y silbando desde entonces';
+const PHOTO_SRC = "/images/subject.webp";
+const PHOTO_ALT = "Andrea del Boca";
+const SPEECH_TEXT = "🍚 ¡¿Quieren arroz?!";
+const BADGE_TEXT = "💵 $6.000.000 / semana 💵";
 
-// Foto principal
-const PHOTO_SRC     = '/images/subject.webp';
-const PHOTO_ALT     = 'Andrea del Boca';
-const SPEECH_TEXT   = '🍚 ¡¿Quieren arroz?!';
-const BADGE_TEXT    = '💵 $6.000.000 / semana 💵';
+const DONATE_HREF = "https://link.mercadopago.com.ar/fattiepox";
+const DONATE_LABEL =
+  "ayudame a ganarle a andrea (o al menos a comprar mi arroz) · alias: fattiepox";
 
-// Donación
-const DONATE_HREF   = 'https://link.mercadopago.com.ar/fattiepox';
-const DONATE_LABEL  = 'ayudame a ganarle a andrea (o al menos a comprar mi arroz) · alias: fattiepox';
-
-// Footer
-const FOOTER_TEXT   = 'Contador en tiempo real · datos según Ángel de Brito (Bondi Live)';
+const FOOTER_TEXT =
+  "Contador en tiempo real · datos según Ángel de Brito (Bondi Live)";
 ---
 
 <BaseLayout
   title="🤑 Andrea del Boca — Contador GH"
   description="Contador en tiempo real de las ganancias de Andrea del Boca en Gran Hermano."
 >
-  <!-- Fondo -->
   <Background imageSrc={BG_IMAGE} />
-
-  <!-- Lluvia de imágenes -->
   <RainEffect imageSrc={RAIN_IMAGE} count={RAIN_COUNT} />
 
-  <!-- Contenido principal -->
   <main class="page">
     <Header
       showName={SHOW_NAME}
@@ -85,14 +81,16 @@ const FOOTER_TEXT   = 'Contador en tiempo real · datos según Ángel de Brito (
 
     <FactPills />
 
-    <DonationTracker />
+    <!-- donationsTotal se calcula desde donors.ts en build time -->
+    <DonationTracker donationsTotal={donationsTotal} />
 
     <DonateButton href={DONATE_HREF} label={DONATE_LABEL} />
+
+    <DonorWall />
 
     <Footer text={FOOTER_TEXT} />
   </main>
 
-  <!-- Script del contador -->
   <script src="../scripts/counter.js"></script>
 </BaseLayout>
 
@@ -110,6 +108,6 @@ const FOOTER_TEXT   = 'Contador en tiempo real · datos según Ángel de Brito (
   }
 
   .spacer {
-    height: 0.5rem; /* margen extra post-foto para el badge absoluto */
+    height: 0.5rem;
   }
 </style>

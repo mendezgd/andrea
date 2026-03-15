@@ -3,11 +3,17 @@
  * DonationTracker.astro
  * ──────────────────────
  * Gráfico comparativo: donaciones recibidas vs ganancias de Andrea.
- * El total de donaciones se lee desde localStorage (escrito por
- * el botón de MercadoPago vía webhook, o seteado manualmente desde
- * la consola del navegador con:
- *   localStorage.setItem('andrea_counter_donations', JSON.stringify([{amount: 5000, date: new Date().toISOString()}]))
+ * El total de donaciones se recibe como prop desde index.astro,
+ * que lo calcula a partir de src/data/donors.ts.
+ *
+ * Props:
+ *   donationsTotal — suma total de todas las donaciones en ARS
  */
+
+interface Props {
+  donationsTotal?: number;
+}
+const { donationsTotal = 0 } = Astro.props;
 ---
 
 <div class="tracker">
@@ -53,6 +59,9 @@
 
   <div class="verdict font-body" id="verdict"></div>
 </div>
+
+<!-- Pasamos el total al script via atributo data -->
+<div id="donationsData" data-total={donationsTotal} style="display:none"></div>
 
 <style>
   /* ── VS Banner ── */
@@ -104,6 +113,7 @@
     line-height: 1;
     animation: subtleBlink 2s ease-in-out infinite;
   }
+
   .tracker {
     background: var(--color-surface);
     border: var(--border-width-heavy) solid var(--color-yellow);
@@ -123,17 +133,12 @@
     align-items: baseline;
     gap: 0.6rem;
   }
+
   .tracker-title {
     font-family: var(--font-display);
     font-size: clamp(1.3rem, 4vw, 1.8rem);
     color: var(--color-yellow);
     letter-spacing: 0.04em;
-  }
-  .tracker-sub {
-    font-size: 0.65rem;
-    color: var(--color-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
   }
 
   .bars {
@@ -148,11 +153,13 @@
     align-items: center;
     gap: 0.5rem;
   }
+
   .bar-name {
     font-size: 0.72rem;
     color: var(--color-white);
     white-space: nowrap;
   }
+
   .bar-track {
     height: 18px;
     background: rgba(255, 255, 255, 0.07);
@@ -160,6 +167,7 @@
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
+
   .bar-fill {
     height: 100%;
     border-radius: var(--radius-pill);
@@ -167,9 +175,11 @@
     transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     min-width: 0;
   }
+
   .bar-andrea {
     background: linear-gradient(90deg, var(--color-pink), var(--color-orange));
   }
+
   .bar-you {
     background: linear-gradient(90deg, var(--color-blue), var(--color-green));
   }
@@ -191,28 +201,22 @@
 </style>
 
 <script>
-  const STORAGE_KEY = "andrea_counter_donations";
-
-  function loadTotal() {
-    try {
-      const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      return list.reduce((s: number, d: any) => s + (d.amount || 0), 0);
-    } catch {
-      return 0;
-    }
-  }
-
   function formatARS(n: number) {
     return "$" + Math.floor(n).toLocaleString("es-AR");
   }
 
   function render() {
-    const youTotal = loadTotal();
+    // Total de donaciones viene del atributo data (calculado en build time desde donors.ts)
+    const dataEl = document.getElementById("donationsData");
+    const youTotal = dataEl ? parseFloat(dataEl.dataset.total || "0") : 0;
+
+    // Total de Andrea viene del contador en tiempo real
     const andreaTotal =
       parseFloat(
         (document.getElementById("moneyTotal")?.textContent || "0")
-          .replace(/[$\.]/g, "")
-          .replace(",", "."),
+          .replace(/\./g, "")
+          .replace(",", ".")
+          .replace("$", ""),
       ) || 0;
 
     const maxVal = Math.max(youTotal, andreaTotal, 1);

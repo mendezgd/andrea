@@ -1,0 +1,192 @@
+---
+/**
+ * DonorWall.astro
+ * ────────────────
+ * Cuadro de agradecimiento a donantes.
+ * Los datos se leen desde src/data/donors.ts —
+ * editá ese archivo y hacé npm run build para actualizar.
+ */
+import { donors } from "../data/donors";
+
+// Ordenar por monto descendente
+const sorted = [...donors].sort((a, b) => b.amount - a.amount);
+
+// Total donado
+const total = donors.reduce((s, d) => s + d.amount, 0);
+
+function formatARS(n: number) {
+  return "$" + Math.floor(n).toLocaleString("es-AR");
+}
+
+const medals = ["🥇", "🥈", "🥉"];
+---
+
+<div class="donor-wall">
+  <div class="donor-header">
+    <span class="donor-title">💙 GRACIAS DONANTES 💙</span>
+    <span class="donor-sub font-body"
+      >Los que la están peleando contra Andrea</span
+    >
+  </div>
+
+  <div class="donor-table-wrap">
+    <table class="donor-table font-body">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Donación</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          sorted.length === 0 ? (
+            <tr>
+              <td colspan="4" class="donor-empty">
+                💙 Aún no hay donantes · ¡Sé el primero!
+              </td>
+            </tr>
+          ) : (
+            sorted.map((donor, i) => (
+              <tr>
+                <td class="col-rank">{medals[i] ?? i + 1}</td>
+                <td>{donor.name}</td>
+                <td class="col-amount">{formatARS(donor.amount)}</td>
+                <td class="col-date">{donor.date}</td>
+              </tr>
+            ))
+          )
+        }
+      </tbody>
+    </table>
+  </div>
+
+  {
+    sorted.length > 0 && (
+      <div class="donor-total font-body">
+        Total donado: <strong>{formatARS(total)}</strong>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .donor-wall {
+    background: var(--color-surface);
+    border: var(--border-width-heavy) solid var(--color-blue);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    box-shadow: 8px 8px 0 var(--color-blue);
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: fadeUp 0.5s 1s ease both;
+  }
+
+  .donor-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    text-align: center;
+  }
+
+  .donor-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    color: var(--color-blue);
+    letter-spacing: 0.06em;
+  }
+
+  .donor-sub {
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .donor-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    border: 2px solid rgba(0, 194, 255, 0.2);
+  }
+
+  .donor-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  .donor-table thead tr {
+    background: rgba(0, 194, 255, 0.12);
+  }
+
+  .donor-table th {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    color: var(--color-blue);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+  }
+
+  .donor-table td {
+    padding: 0.45rem 0.75rem;
+    color: var(--color-white);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: middle;
+  }
+
+  .donor-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .donor-table tbody tr:hover td {
+    background: rgba(0, 194, 255, 0.06);
+  }
+
+  .col-rank {
+    width: 2.5rem;
+    text-align: center;
+    color: var(--color-muted);
+  }
+
+  .col-amount {
+    color: var(--color-green);
+    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+  }
+
+  .col-date {
+    color: var(--color-muted);
+    font-size: 0.7rem;
+  }
+
+  .donor-empty {
+    text-align: center;
+    color: var(--color-muted);
+    padding: 1.2rem !important;
+    font-size: 0.8rem;
+  }
+
+  .donor-total {
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    padding-top: 0.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .donor-total strong {
+    color: var(--color-green);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.03em;
+  }
+</style>
