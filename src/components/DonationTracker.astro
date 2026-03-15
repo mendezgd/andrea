@@ -11,19 +11,30 @@
 ---
 
 <div class="tracker">
-  <div class="tracker-header">
-    <span class="tracker-title">⚔️ VOS vs ANDREA</span>
-    <span class="tracker-sub font-body">batalla de billetes</span>
+  <!-- Banner VS -->
+  <div class="vs-banner">
+    <div class="vs-fighter">
+      <img src="/images/madao.webp" alt="Vos" class="fighter-img" />
+      <span class="fighter-name font-body">💙 madao dev</span>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="vs-fighter">
+      <img
+        src="/images/subject.webp"
+        alt="Andrea del Boca"
+        class="fighter-img fighter-andrea"
+      />
+      <span class="fighter-name font-body">🌟 Andrea</span>
+    </div>
   </div>
 
+  <!-- Cabecera -->
+  <div class="tracker-header">
+    <span class="tracker-title">⚔️ BATALLA POR ARROZ</span>
+  </div>
+
+  <!-- Barras comparativas -->
   <div class="bars">
-    <div class="bar-row">
-      <span class="bar-name font-body">🌟 Andrea</span>
-      <div class="bar-track">
-        <div class="bar-fill bar-andrea" id="barAndrea"></div>
-      </div>
-      <span class="bar-val font-body" id="barAndreaVal">$0</span>
-    </div>
     <div class="bar-row">
       <span class="bar-name font-body">💙 Donaciones</span>
       <div class="bar-track">
@@ -31,12 +42,68 @@
       </div>
       <span class="bar-val font-body" id="barYouVal">$0</span>
     </div>
+    <div class="bar-row">
+      <span class="bar-name font-body">🌟 Andrea</span>
+      <div class="bar-track">
+        <div class="bar-fill bar-andrea" id="barAndrea"></div>
+      </div>
+      <span class="bar-val font-body" id="barAndreaVal">$0</span>
+    </div>
   </div>
 
   <div class="verdict font-body" id="verdict"></div>
 </div>
 
 <style>
+  /* ── VS Banner ── */
+  .vs-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .vs-fighter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 1;
+  }
+
+  .fighter-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50%;
+    border: 3px solid var(--color-blue);
+    box-shadow: var(--shadow-comic-md);
+  }
+
+  .fighter-andrea {
+    border-color: var(--color-pink);
+  }
+
+  .fighter-name {
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .vs-badge {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    color: var(--color-yellow);
+    text-shadow:
+      3px 3px 0 var(--color-border),
+      0 0 20px rgba(255, 230, 0, 0.5);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    animation: subtleBlink 2s ease-in-out infinite;
+  }
   .tracker {
     background: var(--color-surface);
     border: var(--border-width-heavy) solid var(--color-yellow);
